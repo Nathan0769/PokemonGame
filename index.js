@@ -49,6 +49,19 @@ class Attack {
     this.power = power;
     this.stability = stability;
   }
+  //calcule le nombre de damage en fonction de la stabilité et du power de l'attaque. Il retourne le nombre de damage.
+  performAttack() {
+    let damage = 0;
+
+    damage = Math.floor(Math.random() * this.power) * this.stability;
+
+    return damage;
+  }
+  //fonction pour afficher l'attaque avec les différentes propriétés
+  logAttack() {
+    console.log(`Le nom de l'attaque est ${this.name} 
+      elle a une puissance de ${this.power} et une stabilité de ${this.stability}`);
+  }
 }
 
 const pikachu = new Pokemon("Pikachu", "⚡️", 100, [
