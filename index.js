@@ -1,7 +1,7 @@
 import { prompt } from "./prompt.js";
 
 class Pokemon {
-  constructor(name, type, health, attacks = []) {
+  constructor(name, type, health, attacks) {
     this.name = name;
     this.type = type;
     this.health = health;
@@ -18,17 +18,24 @@ class Pokemon {
 
   // affiche dans la console la liste des attaques avec 1 2 3 et le nom de l'attaque.
   logAttack() {
-    console.log("Ces attaques sont : \n");
-    for (let i = 0; this.attacks.length; i++) {
-      console.log(`${i}- ${this.attacks[i]} \n`);
+    let attackList = "";
+    for (let i = 0; i < this.attacks.length; i++) {
+      attackList += `${i} - ${this.attacks[i].name} \n`;
     }
+
+    return attackList;
   }
 
   // affiche le pokemon avec son nom, sa vie, ses attaques.
   logPokemon() {
-    console.log(`${this.name} a ${this.health} PV 
-      Il est de type : ${this.type} 
-      ${this.logAttack()}`);
+    const attacksPokemon = this.logAttack();
+
+    console.log(
+      `\n${this.name} a ${this.health} PV. 
+Il est de type : ${this.type}.  
+Ces attaques sont : 
+${attacksPokemon}`
+    );
   }
 
   // retourne la vie du pokemon avec des 🟥 pour chaque 10% de PV perdu et des 🟩 pour chaque 10% de PV restant.
@@ -64,6 +71,10 @@ class Attack {
   }
 }
 
+class Game {
+  constructor(parameters) {}
+}
+
 const pikachu = new Pokemon("Pikachu", "⚡️", 100, [
   new Attack("Tonnerre", 30, 0.2),
   new Attack("Fatal-Foudre", 20, 0.4),
@@ -81,3 +92,5 @@ const salameche = new Pokemon("Salamèche", "🔥", 90, [
   new Attack("Griffe", 25, 0.3),
   new Attack("Crocs Feu", 15, 0.75),
 ]);
+
+pikachu.logPokemon();
