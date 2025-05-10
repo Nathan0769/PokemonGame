@@ -66,11 +66,13 @@ class Attack {
   }
   //calcule le nombre de damage en fonction de la stabilité et du power de l'attaque. Il retourne le nombre de damage.
   performAttack() {
-    let damage = 0;
+    let damageStability = 0;
 
-    damage = Math.floor(Math.random() * this.power * this.stability);
+    damageStability = Math.floor(
+      Math.random() * this.power * (1 - this.stability)
+    );
 
-    return damage;
+    return this.power - damageStability;
   }
   //fonction pour afficher l'attaque avec les différentes propriétés
   logAttack() {
@@ -102,7 +104,7 @@ class Game {
 
   start() {
     let combatContinue = true;
-    const choixPokemon = this.choixPokemon;
+    const choixPokemon = this.choixPokemon();
     const pokemonAdverse = this.pokemonOpposing(choixPokemon);
 
     while (combatContinue) {
@@ -126,30 +128,36 @@ class Game {
         combatContinue = false;
       }
     }
+    this.combat(choixPokemon, pokemonAdverse);
+    const winner = pokemons[choixPokemon].isInLive
+      ? pokemons[choixPokemon].name
+      : pokemons[pokemonAdverse].name;
 
-    console.log(
-      `\n${
-        pokemonAdverse.isInLive
-          ? pokemons[choixPokemon].name
-          : pokemons[pokemonAdverse].name
-      } n'a plus de santé. ${
-        pokemonAdverse.isInLive
-          ? pokemons[pokemonAdverse].name
-          : pokemons[choixPokemon].name
-      } remporte la bataille !`
-    );
+    const looser = pokemons[choixPokemon].isInLive
+      ? pokemons[pokemonAdverse].name
+      : pokemons[choixPokemon].name;
+
+    console.log(`\n${winner} remporte la bataille ! ${looser} n'a plus de pv.`);
   }
 
-  get choixPokemon() {
-    return (
-      Number(
-        prompt(
-          `Choisissez votre pokémon : \n${pokemons
-            .map((pokemon, index) => `${index + 1} - ${pokemon.name}`)
-            .join("\n")}\nChoix : `
-        )
-      ) - 1
+  choixPokemon() {
+    const choixPokemon = Number(
+      prompt(
+        `Choisissez votre pokémon : \n${pokemons
+          .map(
+            (pokemon, index) =>
+              `${index + 1} - ${pokemon.name} - ${pokemon.type}`
+          )
+          .join("\n")}\nChoix : `
+      )
     );
+
+    if (choixPokemon > 3 || choixPokemon < 1 || Number.isNaN(choixPokemon)) {
+      console.log("Merci de choisir un nombre entre 1 et 3");
+      return this.choixPokemon();
+    }
+
+    return choixPokemon - 1;
   }
 
   // Le script génère un nombre aléatoire entre 1 et 2 qui représente le pokemon adverse
