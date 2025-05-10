@@ -11,7 +11,7 @@ class Pokemon {
 
   // choisit une attaque aléatoirement et retourne l'attaque choisie.
   randomAttack() {
-    const random = Math.floor(Math.random() * 3);
+    const random = Math.floor(Math.random() * this.attacks.length);
 
     return this.attacks[random];
   }
@@ -202,6 +202,12 @@ class Game {
 
     pokemons[pokemonAdverse].health -= damageUser;
     pokemons[pokemonUser].health -= damageAdverse;
+
+    pokemons[pokemonAdverse].health = Math.max(
+      0,
+      pokemons[pokemonAdverse].health
+    );
+    pokemons[pokemonUser].health = Math.max(0, pokemons[pokemonUser].health);
 
     return console.log(
       `\n💥 ${pokemons[pokemonUser].name} utilise ${attaqueUser.name} infligeant ${damageUser} dommage et ${pokemons[pokemonAdverse].name} adverse utilise ${attaqueAdverse.name} infligeant ${damageAdverse} dommage.`
